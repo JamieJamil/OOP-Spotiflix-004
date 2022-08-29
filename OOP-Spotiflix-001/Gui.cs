@@ -1,17 +1,17 @@
 ﻿namespace OOP_Spotiflix_001
 {
-    internal class Gui
+    internal class Gui : Media
     {
-        Data data = new Data();
         public Gui()
         {
-            data.MovieList = new();
+
             //data.MovieList.Add(new Movie() { Title = "Rambo III", Genre = "Action", Length = new DateTime(1, 1, 1, 1, 42, 0), ReleaseDate = new DateTime(1988, 5, 25), WWW=@"https:\\Netflix.com"});
             while (true)
             {
                 Menu();
             }
         }
+        #region Menu
         private void Menu()
         {
             Console.Clear();
@@ -29,6 +29,7 @@
                     break;
                 case ConsoleKey.NumPad3:
                 case ConsoleKey.D3:
+                    MusicMenu();
                     break;
                 case ConsoleKey.NumPad4:
                 case ConsoleKey.D4:
@@ -42,6 +43,8 @@
                     break;
             }
         }
+        #endregion
+        #region Movie
         private void MovieMenu()
         {
             Console.Clear();
@@ -65,33 +68,11 @@
                     break;
             }
         }
-
-        private void SaveData()
-        {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string json = System.Text.Json.JsonSerializer.Serialize(data);
-            File.WriteAllText(path + @"/SpotiflixData.json", json);
-            Console.WriteLine("File saved succesfully in " + path);
-            Console.Write("Press ANY button to go back to continue....");
-            Console.ReadKey();
-        }
-
-        private void LoadData()
-        {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string json = File.ReadAllText(path + @"/SpotiflixData.json");
-            data = System.Text.Json.JsonSerializer.Deserialize<Data>(json);
-            Console.WriteLine("File loaded succesfully from " + path);
-            Console.Write("Press ANY button to go back to continue....");
-            Console.ReadKey();
-        }
-
-        #region Movie
         private void AddMovie()
         {
             Movie movie = new Movie();
 
-            movie.Title = GetString("Title: ");
+            movie.Title = GetString("Adding new movie...\n\nTitle of the movie: ");
             movie.Length = GetLength();
             movie.Genre = GetString("\nGenre: ");
             movie.ReleaseDate = GetReleaseDate();
@@ -108,7 +89,6 @@
                     break;
             }
         }
-
         private void SearchMovie()
         {
             Console.Write("Search for a movie name or genre: ");
@@ -124,42 +104,6 @@
                 }
             }
         }
-
-        private DateTime GetLength()
-        {
-            DateTime to;
-            do
-            {
-                Console.Write("\n[HH:MM:SS]\nMovie length: ");
-
-            } 
-            while (!DateTime.TryParse("01-01-0001 " + Console.ReadLine(), out to));
-            return to;
-        }
-
-        private DateTime GetReleaseDate()
-        {
-            DateTime dateOnly;
-            do
-            {
-                Console.Write("\nDD/MM/YYYY\nRelease date: ");
-            }
-            while (!DateTime.TryParse(Console.ReadLine(), out dateOnly));
-            return dateOnly;
-        }
-
-        private string GetString(string type)
-        {
-            string? input;
-            do
-            {
-                Console.Write(type);
-                input = Console.ReadLine();
-            }
-            while (input == null || input == "");
-            return input;
-        }
-
         private void ShowMovie(Movie m)
         {
             //Console.Clear();
@@ -234,7 +178,7 @@
         private void ShowSeries(Series s)
         {
             Console.Clear();
-            Console.WriteLine($"Title: {s.Title} \nGenre: {s.Genre} \nReleasedate: {s.GetReleaseDate()} \nWebsite: {s.WWW}");
+            Console.WriteLine($"\nTitle: {s.Title} \nGenre: {s.Genre} \nReleasedate: {s.GetReleaseDate()} \nWebsite: {s.WWW}");
         }
 
         private void ShowSeriesList()
@@ -262,16 +206,94 @@
             }
             while (Console.ReadKey().Key == ConsoleKey.Y);
         }
-
-        private int GetInt(string request)
+        #endregion
+        #region Music
+        private void MusicMenu()
         {
-            int i;
+            Console.WriteLine("\nMUSIC MENU\n1 for list of albums\n2 Search for album\n3 for add new album");
+
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.NumPad1:
+                case ConsoleKey.D1:
+                    ShowMusicList();
+                    break;
+                case ConsoleKey.NumPad2:
+                case ConsoleKey.D2:
+                    break;
+                case ConsoleKey.NumPad3:
+                case ConsoleKey.D3:
+                    AddAlbum();
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void AddAlbum()
+        {
+            Album album = new Album();
+            album.Title = GetString("Album name: ");
+            album.Artist = GetString("Artists name: ");
+            album.ReleaseDate = GetReleaseDate();
+
+            ShowAlbum(album);
+            if (Console.ReadKey(true).Key == ConsoleKey.Y) data.MusicList.Add(album);
+
+            Console.WriteLine("Add songs to album? Y/N");
             do
             {
-                Console.Write(request);
+                AddSong(album);
             }
-            while (!int.TryParse(Console.ReadLine(), out i));
-            return i;
+            while (Console.ReadKey(true).Key == ConsoleKey.Y);
+            {
+                AddSong(album);
+                Console.WriteLine("Add another song?");
+            }
+
+        }
+        private void ShowAlbum(Album album, bool showSongs = false)
+        {
+            //TODO show album detals
+            Console.WriteLine($"\nAlbum Name: {album.Title} \nArtist: {album.Artist} \nReleasedate: {album.GetReleaseDate()}");
+            if (showSongs)
+            {
+                foreach (Song song in album.Songs)
+                {
+                    ShowSong(song);
+                }
+            }
+        }
+        private void ShowSong(Song song)
+        {
+            //TODO Show song setails
+            Console.WriteLine($"\nSong Title: {song.Title} \nArtist: {song.Artist} \nReleasedate: {song.GetReleaseDate()} \nReleasedate: {song.GetLength()}");
+            
+        }
+        private void AddSong(Album album)
+        {
+            Song song = new Song();
+            song.Title = GetString("Tittle: ");
+            song.Artist = GetArtist(album.Artist,"Artist: ");
+            song.ReleaseDate = GetReleaseDate();
+            song.Length = GetLength();
+
+            Console.WriteLine("Add song to album?");
+            if (Console.ReadKey(true).Key == ConsoleKey.Y) album.Songs.Add(song);
+
+        }
+        private string GetArtist(string? artist, string type)
+        {
+            Console.Write(type);
+            string input = Console.ReadLine();
+            if (input == "") artist = input;
+            return artist;
+        }
+        private void ShowMusicList()
+        {
+            foreach (Album album in data.MusicList)
+            {
+                ShowAlbum(album, true);
+            }
         }
         #endregion
     }

@@ -1,20 +1,22 @@
 ﻿namespace OOP_Spotiflix_001
 {
-    internal class Song
+    internal class Song : Data
     {
-        public string? SongName { get; set; }
-        public string? Artist { get; set; }
-        public string? Genre { get; set; }
-        public DateTime Length { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public string? WWW { get; set; }
+        public string? GetReleaseDate()
+        {
+            return ReleaseDate.ToString("D");
+        }
+        public string? GetLength()
+        {
+            return Length.ToString("hh:mm");
+        }
     }
-    internal class Album
+    internal class Album : Data
     {
-        public string? AlbumName { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public DateTime Length { get; set; }
-        public List<Series> Songs { get; set; } = new();
-
+        public List<Song> Songs { get; set; } = new();
+        public string? GetReleaseDate()
+        {
+            return ReleaseDate.ToString("D");
+        }
     }
 }
