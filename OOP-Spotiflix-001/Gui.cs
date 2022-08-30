@@ -192,8 +192,8 @@
             {
                 Episode episode = new Episode();
                 episode.Title = GetString("Title: ");
-                episode.Season = GetInt("Title: ");
-                episode.EpisodeNumber = GetInt("Title: ");
+                episode.Season = GetInt("Season: ");
+                episode.EpisodeNumber = GetInt("Episode Number: ");
                 episode.Length = GetLength();
                 episode.ReleaseDate = GetReleaseDate();
 
