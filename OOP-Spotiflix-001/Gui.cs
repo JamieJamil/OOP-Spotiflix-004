@@ -15,7 +15,7 @@
         private void Menu()
         {
             Console.Clear();
-            Console.WriteLine("\nMENU\n1 for movies\n2 series\n3 music\n4 save\n5 Load");
+            Console.WriteLine("\nMAIN MENU\n\n[1] MOVIES\n[2] SERIES\n[3] MUSIC\n\n[4] SAVE\n[5] LOAD");
 
             switch (Console.ReadKey(true).Key)
             {
@@ -48,7 +48,7 @@
         private void MovieMenu()
         {
             Console.Clear();
-            Console.WriteLine("\nMOVIE MENU\n1 for lsit of movies\n2 search\n3 add new");
+            Console.WriteLine("\nMOVIE MENU\n[1] To See List Of Movies\n[2] To Search For A Movie\n[3] To Add New Movie");
 
             switch (Console.ReadKey(true).Key)
             {
@@ -71,15 +71,15 @@
         private void AddMovie()
         {
             Movie movie = new Movie();
-
+            Console.Clear();
             movie.Title = GetString("Adding new movie...\n\nTitle of the movie: ");
-            movie.Length = GetLength();
             movie.Genre = GetString("\nGenre: ");
+            movie.Length = GetLength();
             movie.ReleaseDate = GetReleaseDate();
-            movie.WWW = GetString("\nEnter web adresse: ");
+            movie.WWW = GetString("\nWebsite: ");
 
             ShowMovie(movie);
-            Console.WriteLine("Confirm adding to database Y/N");
+            Console.WriteLine("Confirm adding to list (Y/N)");
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.Y:
@@ -97,7 +97,7 @@
             {
                 if (search != null)
                 {
-                    if (movie.Title.Contains(search) || movie.Genre.Contains(search))
+                    if (movie.Title.ToLower().Contains(search) || movie.Genre.ToLower().Contains(search))
                     {
                         ShowMovie(movie);
                     }
@@ -107,9 +107,7 @@
         private void ShowMovie(Movie m)
         {
             //Console.Clear();
-            Console.WriteLine("\n[Search results]\nTitle - Genre - Length - Release date - Web Adresse");
-            Console.WriteLine($"\n\n{m.Title} {m.GetLength()} {m.Genre} {m.GetReleaseDate()} {m.WWW}");
-            Console.Write("\n\nPress ANY button to go back to Main Menu....");
+            Console.WriteLine($"\nTitle: {m.Title} \nGenre: {m.Genre} \nLength: {m.GetLength()} \nReleasedate: {m.GetReleaseDate()} \nWebsite: {m.WWW}");
         }
         private void ShowMovieList()
         {
@@ -123,7 +121,7 @@
         #region Series
         private void SeriesMenu()
         {
-            Console.WriteLine("\nSERIES MENU\n1 for list of series\n2 for search series\n3 for add new series");
+            Console.WriteLine("\nSERIES MENU\n[1] To See List Of Series\n[2] To Search For A Series\n[3] To Add New Series");
 
             switch (Console.ReadKey(true).Key)
             {
@@ -170,7 +168,7 @@
             {
                 if (search != null)
                 {
-                    if (series.Title.Contains(search) || series.Genre.Contains(search))
+                    if (series.Title.ToLower().Contains(search) || series.Genre.ToLower().Contains(search))
                         ShowSeries(series);
                 }
             }
@@ -210,7 +208,8 @@
         #region Music
         private void MusicMenu()
         {
-            Console.WriteLine("\nMUSIC MENU\n1 for list of albums\n2 Search for album\n3 for add new album");
+            Console.Clear();
+            Console.WriteLine("\nMUSIC MENU\n[1] To See List Of Albums\n[2] To Search For An Album\n[3] To Add New Album");
 
             switch (Console.ReadKey(true).Key)
             {
@@ -220,6 +219,7 @@
                     break;
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
+                    SearchAlbum();
                     break;
                 case ConsoleKey.NumPad3:
                 case ConsoleKey.D3:
@@ -232,14 +232,16 @@
         private void AddAlbum()
         {
             Album album = new Album();
-            album.Title = GetString("Album name: ");
+            Console.Clear();
+            album.Title = GetString("Adding new album...\n\nName of the album: ");
             album.Artist = GetString("Artists name: ");
             album.ReleaseDate = GetReleaseDate();
 
             ShowAlbum(album);
+            Console.WriteLine("\n\nConfirm adding to list (Y/N)");
             if (Console.ReadKey(true).Key == ConsoleKey.Y) data.MusicList.Add(album);
 
-            Console.WriteLine("Add songs to album? Y/N");
+            Console.WriteLine("Add songs to album? (Y/N)");
             do
             {
                 AddSong(album);
@@ -247,7 +249,7 @@
             while (Console.ReadKey(true).Key == ConsoleKey.Y);
             {
                 AddSong(album);
-                Console.WriteLine("Add another song?");
+                Console.WriteLine("Add another song? (Y/N)");
             }
 
         }
@@ -260,6 +262,19 @@
                 foreach (Song song in album.Songs)
                 {
                     ShowSong(song);
+                }
+            }
+        }
+        private void SearchAlbum()
+        {
+            Console.Write("Search: ");
+            string? search = Console.ReadLine();
+            foreach (Album album in data.MusicList)
+            {
+                if (search != null)
+                {
+                    if (album.Title.ToLower().Contains(search) || album.Artist.ToLower().Contains(search))
+                        ShowAlbum(album);
                 }
             }
         }
