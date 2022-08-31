@@ -5,7 +5,7 @@
         public Gui()
         {
 
-            //data.MovieList.Add(new Movie() { Title = "Rambo III", Genre = "Action", Length = new DateTime(1, 1, 1, 1, 42, 0), ReleaseDate = new DateTime(1988, 5, 25), WWW=@"https:\\Netflix.com"});
+            // data.MovieList.Add(new Movie() { Title = "Rambo III", Genre = "Action", Length = new DateTime(1, 1, 1, 1, 42, 0), ReleaseDate = new DateTime(1988, 5, 25), WWW=@"https:\\Netflix.com"});
             while (true)
             {
                 Menu();
