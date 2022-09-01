@@ -92,7 +92,7 @@
         private void SearchMovie()
         {
             Console.Write("Search for a movie name or genre: ");
-            string? search = Console.ReadLine();
+            string? search = Console.ReadLine().ToLower();
             foreach (Movie movie in data.MovieList)
             {
                 if (search != null)
@@ -163,7 +163,7 @@
         private void SearchSeries()
         {
             Console.Write("Search: ");
-            string? search = Console.ReadLine();
+            string? search = Console.ReadLine().ToLower();
             foreach (Series series in data.SeriesList)
             {
                 if (search != null)
@@ -255,7 +255,6 @@
         }
         private void ShowAlbum(Album album, bool showSongs = false)
         {
-            //TODO show album detals
             Console.WriteLine($"\nAlbum Name: {album.Title} \nArtist: {album.Artist} \nReleasedate: {album.GetReleaseDate()}");
             if (showSongs)
             {
@@ -268,7 +267,7 @@
         private void SearchAlbum()
         {
             Console.Write("Search: ");
-            string? search = Console.ReadLine();
+            string? search = Console.ReadLine().ToLower();
             foreach (Album album in data.MusicList)
             {
                 if (search != null)
@@ -280,7 +279,6 @@
         }
         private void ShowSong(Song song)
         {
-            //TODO Show song setails
             Console.WriteLine($"\nSong Title: {song.Title} \nArtist: {song.Artist} \nReleasedate: {song.GetReleaseDate()} \nReleasedate: {song.GetLength()}");
             
         }
